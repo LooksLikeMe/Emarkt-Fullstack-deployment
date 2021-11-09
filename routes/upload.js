@@ -6,11 +6,17 @@ import fs from 'fs'
 
 const router = Router()
 
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
-})
+// cloudinary.config({
+//   cloud_name: process.env.CLOUD_NAME,
+//   api_key: process.env.CLOUD_API_KEY,
+//   api_secret: process.env.CLOUD_API_SECRET,
+// })
+//================
+cloudinary.config({ 
+  cloud_name: 'madd39', 
+  api_key: '758518379691385', 
+  api_secret: 'FxpC7poQ13htoLJ6P6ueTTrYabE' 
+});
 //Upload image (only admin in future) 
 router.post('/upload', (req, res) => {
   try {
@@ -28,12 +34,13 @@ router.post('/upload', (req, res) => {
     }
     cloudinary.v2.uploader.upload(
       file.tempFilePath,
-      { folder: 'test' },
+      { folder: "test" },
       async (err, result) => {
         if (err) throw err;
         removeTmp(file.tempFilePath)
-        res.json({ public_id : result.public_id, url: result.secure_url })
+        res.json({ result })
       }
+      //public_id : result.public_id, url: result.secure_url
     )
   } catch (err) {
     return res.status(500).json({ msg: err.message })
@@ -54,8 +61,8 @@ router.post('/destroy', (req, res) => {
   }
 })
 const removeTmp = (path) => {
- fs.unlink(path, (err) => {
-    if (err) throw err
+ fs.unlink(path, err => {
+    if (err) throw err;
   })
 }
 export default router
