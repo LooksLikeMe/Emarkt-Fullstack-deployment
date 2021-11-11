@@ -7,11 +7,13 @@ function Products() {
   const [products] = state.productsAPI.products
 
   return (
+    <>
     <div className="products">
       {products.map((product) => {
         return <ProductItem key={product._id} product={product} />
       })}
     </div>
+    </>
   )
 }
 

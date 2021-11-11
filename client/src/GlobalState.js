@@ -5,10 +5,11 @@ export const GlobalState = createContext()
 
 export const DataProvider = ({children}) => {
     const [token, setToken] = useState(false)
+
     ProductsAPI()
     const state = {
         token: [token, setToken],
-        ProductsAPI: ProductsAPI()
+        productsAPI: ProductsAPI()
     }
     return (
         <GlobalState.Provider value={state}>

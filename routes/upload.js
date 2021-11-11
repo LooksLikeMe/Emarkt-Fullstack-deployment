@@ -38,7 +38,7 @@ router.post('/upload', (req, res) => {
       async (err, result) => {
         if (err) throw err;
         removeTmp(file.tempFilePath)
-        res.json({ result })
+        res.json({ public_id: result.public_id, url : result.url })
       }
       //public_id : result.public_id, url: result.secure_url
     )

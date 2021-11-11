@@ -1,16 +1,17 @@
+import { response } from 'express'
 import Products from '../models/productModel.js'
 
 //filtr,sort,paginating
 
 class APIfeatures {
   constructor(query, queryString) {
-    this.query = query
-    this.queryString = queryString
+    this.query = query;
+    this.queryString = queryString;
   }
   filtering() {
     const queryObj = { ...this.queryString }
     const excludedFields = ['page', 'sort', 'limit']
-    excludedFields.forEach((el) => delete queryObj[el])
+    excludedFields.forEach(el => delete(queryObj[el]))
     let queryStr = JSON.stringify(queryObj)
     queryStr = queryStr.replace(
       /\b(gte|gt|lt|lte|regex)\b/g,
@@ -66,7 +67,7 @@ const productCtrl = {
         category,
       } = req.body
       if (!images) return res.status(400).json({ msg: 'No image upload' })
-      const product = Product.findOne({ product_id })
+      const product = await Products.findOne({ product_id })
       if (product)
         return res.status(400).json({ msg: 'This product already exist' })
       const newProduct = new Products({
@@ -79,6 +80,7 @@ const productCtrl = {
         category,
       })
       await newProduct.save()
+      res.json({msg : "Created a product"})
     } catch (err) {
       return res.status(500).json({ msg: err.message })
     }
