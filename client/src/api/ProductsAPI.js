@@ -6,6 +6,7 @@ function ProductsAPI() {
 
   const getProducts = async () => {
     const res = await axios.get('/api/products')
+    console.log(res)
     
     setProducts(res.data.products)
   }

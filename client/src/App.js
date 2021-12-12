@@ -11,7 +11,6 @@ function App() {
         <div className="App">
           <hr />
           <Header />
-          test
           <MainPages />
         </div>
       </Router>

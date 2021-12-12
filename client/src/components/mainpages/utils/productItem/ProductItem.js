@@ -7,9 +7,10 @@ function ProductItem({ product }) {
       <img src={product.images.url} alt="" />
 
       <div className="product_box">
+        {console.log(product._id)}
         <h2>{product.title}</h2>
         <span>${product.price}$</span>
-        <p>${product.description}</p>
+        <p>{product.description}</p>
       </div>
       <div className="row_btn">
         <Link id="btn_buy" to="#!">
