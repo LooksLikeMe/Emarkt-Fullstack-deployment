@@ -11,6 +11,7 @@ function Header() {
   console.log(state)
   const [isLogged, setIsLogged] = state.UserAPI.isLogged;
   const [isAdmin, setIsAdmin] = state.UserAPI.isAdmin;
+  const [cart] = state.UserAPI.cart
 
   const adminRouter = () => {
     return (
@@ -55,7 +56,7 @@ function Header() {
       </div>
       <ul>
         <li>
-          <Link to="/"> {isAdmin ? "Products" : "Shop"}Products</Link>
+          <Link to="/"> {isAdmin ? "Products" : "Shop"}</Link>
         </li>
         {isAdmin && adminRouter()}{" "}
         {isLogged ? (
@@ -73,7 +74,7 @@ function Header() {
         ""
       ) : (
         <div className="cart-icon">
-          <span>0</span>
+          <span>{cart.length}</span>
           <Link to="/cart">
             <img src={Cart} alt="" width="30" />
           </Link>

@@ -1,8 +1,10 @@
 import axios from 'axios'
-import React, {useEffect, useState} from 'react'
+import { get } from 'express/lib/request'
+import {useEffect, useState} from 'react'
 const UserAPI = (token) =>  {
     const [isLogged, setIsLogged] = useState(false)
     const [isAdmin, setIsAdmin] = useState(false)
+    const [cart, setCart] = useState([])
 
     useEffect(() => {
         if(token) {
@@ -17,12 +19,28 @@ const UserAPI = (token) =>  {
                     alert(err.responce.data.msg)
                 }
             }
+            getUser()
         }
     }, [token])
+    
+    const addCart = async (product) => {
+        if(!isLogged) return alert("Please login to continue buying")
+
+        const check = cart.every(item => {
+            return item._id !== product._id
+        })
+        if(check) {
+            setCart([...cart, {...product, quantity: 1 }]) 
+        }else {
+            alert("This product has been added to card.")
+        }
+      }
 
     return {
         isLogged:[isLogged, setIsLogged],
-        isAdmin:[isAdmin,setIsAdmin]
+        isAdmin:[isAdmin,setIsAdmin],
+        cart: [cart, setCart],
+        addCart: addCart
     }
 }
 
