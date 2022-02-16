@@ -1,45 +1,112 @@
-import {useContext} from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { GlobalState } from '../../../GlobalState'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+import PayPalButton from './PayPalButton'
 
 const Cart = () => {
-    const state = useContext(GlobalState)
-    const [cart] = state.UserAPI.cart
+  const state = useContext(GlobalState)
+  const [token] = state.token
+  const [cart, setCart] = state.UserAPI.cart
+  const [total, setTotal] = useState(0)
 
-    if(cart.length === 0) {
-        return <h2 style={{textAling : "center", fontSize: "5rem"}}>Cart Empty</h2>
+  useEffect(() => {
+    const getTotal = () => {
+      const total = cart.reduce((acc, item) => {
+        return acc + item.price * item.quantity
+      }, 0)
+      setTotal(total)
     }
+    getTotal()
+  }, [cart])
 
-    return (
-        <div>
-            {
-                cart.map(product => (
-                    <div className="detail cart" key={product._id}>
-                    <img src={product.images.url} alt="" className='img_container'/>
-                    <div className="box-detail">
-                      <div className="row">
-                        <h2>{product.title}</h2>
-                      </div>
-                      <h3> $ {product.price * product.quantity}</h3>
-                      <p>{product.description}</p>
-                      <p>{product.content}</p>
-                      <div className='amount'>
-                          <button> - </button>
-                          <span>{product.quantity}</span>
-                          <button> + </button>
-
-                      </div>
-                      <div className='delete'>X</div>
-                    </div>
-                  </div>
-                ))
-            }
-            <div className='total'>
-            <h3>Total: $ 0</h3>
-            <Link to="#!">Payment</Link>
-            </div>
-        </div>
+  const addToCart = async cart => {
+    await axios.patch(
+      '/user/addcart',
+      { cart },
+      {
+        headers: { Authorization: token },
+      }
     )
+  }
+  const increment = id => {
+    cart.forEach(item => {
+      if (item._id === id) {
+        return item.quantity < 999 ? (item.quantity += 1) : item.quantity
+      }
+    })
+    setCart([...cart])
+    addToCart()
+  }
+  const decrement = id => {
+    cart.forEach(item => {
+      if (item._id === id) {
+        return item.quantity > 1 ? (item.quantity -= 1) : item.quantity
+      }
+    })
+    setCart([...cart])
+    addToCart()
+  }
+  const removeProduct = id => {
+    if (window.confirm('Do you want to delete this product?')) {
+      cart.forEach((item, idx) => {
+        if (item._id === id) {
+          cart.splice(idx, 1)
+        }
+      })
+      setCart([...cart])
+      addToCart()
+    }
+  }
+  const tranSuccess = async payment => {
+    console.log(payment)
+    const { paymentID, address } = payment
+    await axios.post(
+      '/api/payment',
+      {
+        cart,
+        paymentID,
+        address,
+      },
+      { headers: { Authorization: token } }
+    )
+    setCart([])
+    addToCart()
+    alert('You have successfully placed an order.')
+  }
+  if (cart.length === 0) {
+    return <h2 style={{ textAling: 'center', fontSize: '5rem' }}>Cart Empty</h2>
+  }
+
+  return (
+    <div>
+      {cart.map(product => (
+        <div className='detail cart' key={product._id}>
+          <img src={product.images.url} alt='' />
+          <div className='box-detail'>
+            <div className='row'>
+              <h2>{product.title}</h2>
+            </div>
+            <h3> $ {product.price * product.quantity}</h3>
+            <p>{product.description}</p>
+            <p>{product.content}</p>
+            <div className='amount'>
+              <button onClick={() => decrement(product._id)}> - </button>
+              <span>{product.quantity}</span>
+              <button onClick={() => increment(product._id)}> + </button>
+            </div>
+            <div className='delete' onClick={() => removeProduct(product._id)}>
+              X
+            </div>
+          </div>
+        </div>
+      ))}
+      <div className='total'>
+        <h3>Total: $ {total}</h3>
+        <PayPalButton />
+      </div>
+    </div>
+  )
 }
 
 export default Cart

@@ -43,5 +43,8 @@ button {
 @import url('./components/mainpages/detailProduct/detailProduct.css');
 
 /* login/register */
-@import url('./components//mainpages//auth/login.css');
+@import url('./components/mainpages/auth/login.css');
+
+/* cart */
+@import url('./components/mainpages/cart/cart.css');
 

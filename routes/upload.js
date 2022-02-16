@@ -12,19 +12,19 @@ const router = Router()
 //   api_secret: process.env.CLOUD_API_SECRET,
 // })
 //================
-cloudinary.config({ 
-  cloud_name: 'madd39', 
-  api_key: '758518379691385', 
-  api_secret: 'FxpC7poQ13htoLJ6P6ueTTrYabE' 
-});
-//Upload image (only admin in future) 
+cloudinary.config({
+  cloud_name: 'madd39',
+  api_key: '758518379691385',
+  api_secret: 'FxpC7poQ13htoLJ6P6ueTTrYabE',
+})
+//Upload image (only admin in future)
 router.post('/upload', (req, res) => {
   try {
     if (!req.files || Object.keys(req.files).length === 0)
       return res.status(400).json({ msg: 'No files were updated.' })
 
     const file = req.files.file
-    if (file.size > 1024*1024) {
+    if (file.size > 1024 * 1024) {
       removeTmp(file.tempFilePath)
       return res.status(400).json({ msg: 'Size too large.' })
     }
@@ -34,11 +34,11 @@ router.post('/upload', (req, res) => {
     }
     cloudinary.v2.uploader.upload(
       file.tempFilePath,
-      { folder: "test" },
+      { folder: 'test' },
       async (err, result) => {
-        if (err) throw err;
+        if (err) throw err
         removeTmp(file.tempFilePath)
-        res.json({ public_id: result.public_id, url : result.url })
+        res.json({ public_id: result.public_id, url: result.url })
       }
       //public_id : result.public_id, url: result.secure_url
     )
@@ -48,11 +48,11 @@ router.post('/upload', (req, res) => {
 })
 //Delete image (only admin in future)
 router.post('/destroy', (req, res) => {
-     try {
+  try {
     const { public_id } = req.body
     if (!public_id) return res.status(400).json({ msg: 'No images Selected' })
     cloudinary.v2.uploader.destroy(public_id, async (err, result) => {
-      if (err) throw err;
+      if (err) throw err
 
       res.json({ msg: 'Deleted Image' })
     })
@@ -60,9 +60,9 @@ router.post('/destroy', (req, res) => {
     return res.status(500).json({ msg: err.message })
   }
 })
-const removeTmp = (path) => {
- fs.unlink(path, err => {
-    if (err) throw err;
+const removeTmp = path => {
+  fs.unlink(path, err => {
+    if (err) throw err
   })
 }
 export default router

@@ -10,6 +10,7 @@ import userRouter from './routes/userRouter.js'
 import categoryRouter from './routes/categoryRouter.js'
 import upload from './routes/upload.js'
 import productRouter from './routes/productRouter.js'
+import paymentRouter from './routes/paymentRouter.js'
 
 //Init
 dotenv.config()
@@ -31,10 +32,11 @@ app.use('/user', userRouter)
 app.use('/api', categoryRouter)
 app.use('/api', upload)
 app.use('/api', productRouter)
+app.use('/api', paymentRouter)
 
 //Mongo connection
 const URI = process.env.MONGODB_URL
-mongoose.connect(URI, {}, (err) =>
+mongoose.connect(URI, {}, err =>
   err ? console.log(err) : console.log('Connected to MongoDB')
 )
 //Start server
