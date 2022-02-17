@@ -48,3 +48,6 @@ button {
 /* cart */
 @import url('./components/mainpages/cart/cart.css');
 
+/* history */
+@import url('./components/mainpages/history/history.css');
+
