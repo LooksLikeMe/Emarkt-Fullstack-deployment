@@ -7,9 +7,8 @@ import PayPalButton from './PayPalButton'
 const Cart = () => {
   const state = useContext(GlobalState)
   const [token] = state.token
-  const [cart, setCart] = state.UserAPI.cart
+  const [cart, setCart] = state.userAPI.cart
   const [total, setTotal] = useState(0)
-  const [callback, setCallback] = state.UserAPI.callback
 
   useEffect(() => {
     const getTotal = () => {
@@ -60,7 +59,6 @@ const Cart = () => {
     }
   }
   const tranSuccess = async payment => {
-    console.log(payment)
     const { paymentID, address } = payment
     await axios.post(
       '/api/payment',
@@ -74,7 +72,6 @@ const Cart = () => {
     setCart([])
     addToCart()
     alert('You have successfully placed an order.')
-    setCallback(!callback)
   }
   if (cart.length === 0) {
     return <h2 style={{ textAling: 'center', fontSize: '5rem' }}>Cart Empty</h2>

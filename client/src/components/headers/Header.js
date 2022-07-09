@@ -8,14 +8,12 @@ import axios from 'axios'
 
 function Header() {
   const state = useContext(GlobalState)
-  console.log(state)
-  const [isLogged] = state.UserAPI.isLogged
-  const [isAdmin] = state.UserAPI.isAdmin
-  const [cart] = state.UserAPI.cart
+  const [isLogged] = state.userAPI.isLogged
+  const [isAdmin] = state.userAPI.isAdmin
+  const [cart] = state.userAPI.cart
 
   const logoutUser = async () => {
     await axios.get('/user/logout')
-    localStorage.clear()
     window.location.href = '/'
   }
   const adminRouter = () => {
