@@ -24,11 +24,11 @@ const CreateProduct = () => {
   const [loading, setLoading] = useState(false)
 
   return (
-    <div className="create-product">
+    <div className="create_product">
       <div class="upload">
         <input type="file" name="file" id="file_up" />
         <div id="file_img">
-          <img src="" alt="" />
+          <img alt="" />
           <span>X</span>
         </div>
       </div>
@@ -59,7 +59,7 @@ const CreateProduct = () => {
         <div className="row">
           <label htmlFor="price">Price</label>
           <input
-            type="text"
+            type="number"
             name="price"
             id="price"
             required
@@ -69,7 +69,7 @@ const CreateProduct = () => {
 
         <div className="row">
           <label htmlFor="description">Description</label>
-          <input
+          <textarea
             type="text"
             name="description"
             id="description"
@@ -100,6 +100,7 @@ const CreateProduct = () => {
             ))}
           </select>
         </div>
+        <button type="submit">Create</button>
       </form>
     </div>
   )
